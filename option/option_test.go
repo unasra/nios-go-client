@@ -1,12 +1,11 @@
 package option
 
 import (
+	"github.com/unasra/nios-go-client/internal"
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/infobloxopen/bloxone-go-client/internal"
 )
 
 func TestWithCSPUrl(t *testing.T) {

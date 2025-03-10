@@ -78,10 +78,10 @@ func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		ClientName:       "bloxone-go-client",
 		CSPURL:           lookupEnv(envBloxOneCSPURL, "https://csp.infoblox.com"),
-		APIKey:           lookupEnv(envBloxOneAPIKey, ""),
+		APIKey:           lookupEnv(envBloxOneAPIKey, "admin:infoblox"),
 		DefaultHeader:    make(map[string]string),
-		Debug:            lookupEnvBool(envIBLogLevel, false),
-		UserAgent:        fmt.Sprintf("bloxone-%s/%s", sdkIdentifier, version),
+		Debug:            lookupEnvBool(envIBLogLevel, true),
+		UserAgent:        fmt.Sprintf("nios-%s/%s", sdkIdentifier, version),
 		Servers:          ServerConfigurations{},
 		OperationServers: map[string]ServerConfigurations{},
 		DefaultTags:      make(map[string]string),

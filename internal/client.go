@@ -3,6 +3,8 @@ package internal
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -28,8 +30,8 @@ const (
 	headerSDK           = "x-infoblox-sdk"
 	headerAuthorization = "Authorization"
 
-	envBloxOneCSPURL = "BLOXONE_CSP_URL"
-	envBloxOneAPIKey = "BLOXONE_API_KEY"
+	envBloxOneCSPURL = "NIOS_HOST_URL"
+	envBloxOneAPIKey = "NIOS_AUTH"
 	envIBLogLevel    = "IB_LOG_LEVEL"
 
 	version       = "0.1"
@@ -57,6 +59,11 @@ type Service struct {
 // NewAPIClient creates a new API client. Requires a userAgent string describing your application.
 // optionally a custom http.Client to allow for advanced features such as caching.
 func NewAPIClient(basePath string, cfg *Configuration) *APIClient {
+	cfg.HTTPClient = &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
 	if cfg.HTTPClient == nil {
 		cfg.HTTPClient = http.DefaultClient
 	}
@@ -71,7 +78,8 @@ func NewAPIClient(basePath string, cfg *Configuration) *APIClient {
 	cfg.Servers = []ServerConfiguration{{URL: apiUrl}}
 	cfg.DefaultHeader[headerSDK] = sdkIdentifier
 	cfg.DefaultHeader[headerClient] = cfg.ClientName
-	cfg.DefaultHeader[headerAuthorization] = "Token " + cfg.APIKey
+	cfg.APIKey = base64.StdEncoding.EncodeToString([]byte(cfg.APIKey))
+	cfg.DefaultHeader[headerAuthorization] = "Basic " + cfg.APIKey
 
 	c := &APIClient{}
 	c.Cfg = cfg

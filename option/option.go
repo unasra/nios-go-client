@@ -1,9 +1,8 @@
 package option
 
 import (
+	"github.com/unasra/nios-go-client/internal"
 	"net/http"
-
-	"github.com/infobloxopen/bloxone-go-client/internal"
 )
 
 // ClientOption is a function that applies configuration options to the API Client.
