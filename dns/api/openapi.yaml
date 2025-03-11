@@ -1,0 +1,1131 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: jkhatri@infoblox.com
+    name: Infoblox
+    url: https://www.infoblox.com
+  description: OpenAPI 3.x.x specification for the IbClient API
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://www.infoblox.com
+  title: IbClient
+  version: 3.0.0
+servers:
+- description: Development server
+  url: "https://{nios_host}/wapi/v2.12.3"
+  variables:
+    nios_host:
+      default: 172.28.83.87
+      description: Infoblox NIOS server IP address
+      enum:
+      - 172.28.83.87
+security:
+- bearerAuth: []
+tags:
+- description: Operations about ** record:a ** objects
+  name: recordA
+paths:
+  /record:a:
+    get:
+      parameters:
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Enter the number of results to be fetched
+        in: query
+        name: _max_results
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: "Select 1 if paging is required. If SET, _max_results and _return_as_object\
+          \ must be entered."
+        in: query
+        name: _paging
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: Enter the page ID for fetching the next page
+        in: query
+        name: _page_id
+        required: false
+        schema:
+          type: string
+      - description: "If set to GM, the request is redirected to Grid master for processing.\
+          \ If set to LOCAL, the request is processed locally. This option is applicable\
+          \ only on vConnector grid members. The default is LOCAL."
+        in: query
+        name: _proxy_search
+        required: false
+        schema:
+          type: string
+      - description: "If this option is specified, a WAPI schema will be returned"
+        in: query
+        name: _schema
+        required: false
+        schema:
+          type: string
+      - description: "If this option is specified, a WAPI schema of particular version\
+          \ will be returned. If options is omitted, schema version is assumed to\
+          \ be 1"
+        in: query
+        name: _schema_version
+        required: false
+        schema:
+          type: integer
+      - description: "When set to 1, it returns the documentation of the object.Applicable\
+          \ only when _schema_version is 2"
+        in: query
+        name: _get_doc
+        required: false
+        schema:
+          type: integer
+      - description: "If this option is specified, search only fields will also be\
+          \ returned. Applicable only when _schema_version is 2"
+        in: query
+        name: _schema_searchable
+        required: false
+        schema:
+          type: integer
+      - description: "If this option is set to True, fields which support inheritance,\
+          \ will display data properly."
+        in: query
+        name: _inheritance
+        required: false
+        schema:
+          type: boolean
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: comment
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: creator
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: ddns_principal
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: ipv4addr
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: reclaimable
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: view
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: zone
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecordAResponse'
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:a
+    post:
+      parameters:
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordARequest'
+        description: Enter the request body here
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:a
+  /record:a/{record:a_reference}:
+    delete:
+      description: Delete the record:a resource
+      parameters:
+      - description: Enter the reference for record:a
+        explode: false
+        in: path
+        name: record:a_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:a
+    get:
+      parameters:
+      - description: Enter the reference for record:a
+        explode: false
+        in: path
+        name: record:a_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordA'
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:a
+    put:
+      description: Update the record:a resource
+      parameters:
+      - description: Enter the reference for record:a
+        explode: false
+        in: path
+        name: record:a_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordARequest'
+        description: Enter the request body here
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:a
+  /record:aaaa:
+    get:
+      parameters:
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Enter the number of results to be fetched
+        in: query
+        name: _max_results
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: "Select 1 if paging is required. If SET, _max_results and _return_as_object\
+          \ must be entered."
+        in: query
+        name: _paging
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      - description: Enter the page ID for fetching the next page
+        in: query
+        name: _page_id
+        required: false
+        schema:
+          type: string
+      - description: "If set to GM, the request is redirected to Grid master for processing.\
+          \ If set to LOCAL, the request is processed locally. This option is applicable\
+          \ only on vConnector grid members. The default is LOCAL."
+        in: query
+        name: _proxy_search
+        required: false
+        schema:
+          type: string
+      - description: "If this option is specified, a WAPI schema will be returned"
+        in: query
+        name: _schema
+        required: false
+        schema:
+          type: string
+      - description: "If this option is specified, a WAPI schema of particular version\
+          \ will be returned. If options is omitted, schema version is assumed to\
+          \ be 1"
+        in: query
+        name: _schema_version
+        required: false
+        schema:
+          type: integer
+      - description: "When set to 1, it returns the documentation of the object.Applicable\
+          \ only when _schema_version is 2"
+        in: query
+        name: _get_doc
+        required: false
+        schema:
+          type: integer
+      - description: "If this option is specified, search only fields will also be\
+          \ returned. Applicable only when _schema_version is 2"
+        in: query
+        name: _schema_searchable
+        required: false
+        schema:
+          type: integer
+      - description: "If this option is set to True, fields which support inheritance,\
+          \ will display data properly."
+        in: query
+        name: _inheritance
+        required: false
+        schema:
+          type: boolean
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: comment
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: creator
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: ddns_principal
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: ipv4addr
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: reclaimable
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: view
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Enter the value of the field
+        explode: true
+        in: query
+        name: zone
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRecordAAAAResponse'
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:aaaa
+    post:
+      parameters:
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordAAAARequest'
+        description: Enter the request body here
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:aaaa
+  /record:aaaa/{record:aaaa_reference}:
+    delete:
+      description: Delete the record:aaaa resource
+      parameters:
+      - description: Enter the reference for record:aaaa
+        explode: false
+        in: path
+        name: record:aaaa_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:aaaa
+    get:
+      parameters:
+      - description: Enter the reference for record:aaaa
+        explode: false
+        in: path
+        name: record:aaaa_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordAAAA'
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:aaaa
+    put:
+      description: Update the record:aaaa resource
+      parameters:
+      - description: Enter the reference for record:aaaa
+        explode: false
+        in: path
+        name: record:aaaa_reference
+        required: true
+        schema:
+          example: resourceID:resourceName
+          type: string
+        style: simple
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordAAAARequest'
+        description: Enter the request body here
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Reference of the created A record
+                type: string
+          description: OK
+      security:
+      - basicAuth: []
+      tags:
+      - record:aaaa
+components:
+  parameters:
+    recordAReference:
+      description: Enter the reference for record:a
+      explode: false
+      in: path
+      name: record:a_reference
+      required: true
+      schema:
+        example: resourceID:resourceName
+        type: string
+      style: simple
+    recordAAAAReference:
+      description: Enter the reference for record:aaaa
+      explode: false
+      in: path
+      name: record:aaaa_reference
+      required: true
+      schema:
+        example: resourceID:resourceName
+        type: string
+      style: simple
+    ReturnFields:
+      description: Enter the field names followed by comma
+      in: query
+      name: _return_fields
+      required: false
+      schema:
+        type: string
+    ReturnFieldsPlus:
+      description: "Enter the field names followed by comma, this returns the required\
+        \ fields along with the default fields"
+      in: query
+      name: _return_fields+
+      required: false
+      schema:
+        type: string
+    MaxResults:
+      description: Enter the number of results to be fetched
+      in: query
+      name: _max_results
+      required: false
+      schema:
+        minimum: 1
+        type: integer
+    ReturnAsObject:
+      description: Select 1 if result is required as an object
+      in: query
+      name: _return_as_object
+      required: false
+      schema:
+        default: 0
+        enum:
+        - 0
+        - 1
+        type: integer
+    Paging:
+      description: "Select 1 if paging is required. If SET, _max_results and _return_as_object\
+        \ must be entered."
+      in: query
+      name: _paging
+      required: false
+      schema:
+        default: 0
+        enum:
+        - 0
+        - 1
+        type: integer
+    PageId:
+      description: Enter the page ID for fetching the next page
+      in: query
+      name: _page_id
+      required: false
+      schema:
+        type: string
+    ProxySearch:
+      description: "If set to GM, the request is redirected to Grid master for processing.\
+        \ If set to LOCAL, the request is processed locally. This option is applicable\
+        \ only on vConnector grid members. The default is LOCAL."
+      in: query
+      name: _proxy_search
+      required: false
+      schema:
+        type: string
+    Schema:
+      description: "If this option is specified, a WAPI schema will be returned"
+      in: query
+      name: _schema
+      required: false
+      schema:
+        type: string
+    SchemaVersion:
+      description: "If this option is specified, a WAPI schema of particular version\
+        \ will be returned. If options is omitted, schema version is assumed to be\
+        \ 1"
+      in: query
+      name: _schema_version
+      required: false
+      schema:
+        type: integer
+    GetDoc:
+      description: "When set to 1, it returns the documentation of the object.Applicable\
+        \ only when _schema_version is 2"
+      in: query
+      name: _get_doc
+      required: false
+      schema:
+        type: integer
+    SchemaSearchable:
+      description: "If this option is specified, search only fields will also be returned.\
+        \ Applicable only when _schema_version is 2"
+      in: query
+      name: _schema_searchable
+      required: false
+      schema:
+        type: integer
+    Inheritance:
+      description: "If this option is set to True, fields which support inheritance,\
+        \ will display data properly."
+      in: query
+      name: _inheritance
+      required: false
+      schema:
+        type: boolean
+  schemas:
+    ListRecordAResponse:
+      description: The response format to retrieve __ARecord__ objects.
+      items:
+        $ref: '#/components/schemas/RecordA'
+      title: ListARecordResponse
+      type: array
+    RecordA:
+      example:
+        creation_time: timestamp
+        aws_rte53_record_info: awsrte53recordinfo
+        creator: STATIC
+        extattrs: extattr
+        shared_record_group: shared_record_group
+        use_ttl: true
+        discovered_data: discoverydata
+        cloud_info: grid:cloudapi:info
+        ddns_protected: true
+        ipv4addr: ipv4addr
+        ttl: 0
+        dns_name: dns_name
+        ms_ad_user_data: msserver:aduser:data
+        view: view
+        zone: zone
+        ddns_principal: ddns_principal
+        disable: true
+        _ref: _ref
+        name: name
+        remove_associated_ptr: true
+        comment: comment
+        last_queried: timestamp
+        forbid_reclamation: true
+        reclaimable: true
+      properties:
+        _ref:
+          description: The reference to the object.
+          type: string
+        aws_rte53_record_info:
+          description: Aws Route 53 record information.
+          enum:
+          - awsrte53recordinfo
+          type: string
+        cloud_info:
+          description: Structure containing all cloud API related information for
+            this object.
+          enum:
+          - grid:cloudapi:info
+          type: string
+        comment:
+          description: Comment for the record; maximum 256 characters.
+          type: string
+        creation_time:
+          description: The time of the record creation in Epoch seconds format.
+          enum:
+          - timestamp
+          type: string
+        creator:
+          description: The record creator.
+          enum:
+          - STATIC
+          - DYNAMIC
+          - SYSTEM
+          type: string
+        ddns_principal:
+          description: The GSS-TSIG principal that owns this record.
+          type: string
+        ddns_protected:
+          description: Determines if the DDNS updates for this record are allowed
+            or not.
+          type: boolean
+        disable:
+          description: Determines if the record is disabled or not. False means that
+            the record is enabled.
+          type: boolean
+        discovered_data:
+          description: The discovered data for this A record.
+          enum:
+          - discoverydata
+          type: string
+        dns_name:
+          description: The name for an A record in punycode format.
+          type: string
+        extattrs:
+          description: Extensible attributes associated with the object.
+          enum:
+          - extattr
+          type: string
+        forbid_reclamation:
+          description: Determines if the reclamation is allowed for the record or
+            not.
+          type: boolean
+        ipv4addr:
+          description: The IPv4 Address of the record.
+          type: string
+        last_queried:
+          description: The time of the last DNS query in Epoch seconds format.
+          enum:
+          - timestamp
+          type: string
+        ms_ad_user_data:
+          description: The Microsoft Active Directory user related information.
+          enum:
+          - msserver:aduser:data
+          type: string
+        name:
+          description: Name for A record in FQDN format.
+          type: string
+        reclaimable:
+          description: Determines if the record is reclaimable or not.
+          type: boolean
+        remove_associated_ptr:
+          description: Whether to remove associated PTR records while deleting the
+            A record.
+          type: boolean
+        shared_record_group:
+          description: The shared record group this record belongs to.
+          type: string
+        ttl:
+          description: "Time-to-live value of the record, in seconds."
+          type: integer
+        use_ttl:
+          description: Flag to indicate whether the TTL value should be used for the
+            A record.
+          type: boolean
+        view:
+          description: View that this record is part of.
+          type: string
+        zone:
+          description: The zone in which the record resides.
+          type: string
+      type: object
+    RecordARequest:
+      example:
+        creator: STATIC
+        view: view
+        extattrs: extattrs
+        ddns_principal: ddns_principal
+        disable: true
+        use_ttl: true
+        name: name
+        comment: comment
+        ddns_protected: true
+        forbid_reclamation: true
+        ipv4addr: ipv4addr
+        ttl: 0
+      properties:
+        comment:
+          type: string
+        creator:
+          enum:
+          - STATIC
+          - DYNAMIC
+          - SYSTEM
+          type: string
+        ddns_principal:
+          type: string
+        ddns_protected:
+          type: boolean
+        disable:
+          type: boolean
+        extattrs:
+          type: string
+        forbid_reclamation:
+          type: boolean
+        ipv4addr:
+          type: string
+        name:
+          type: string
+        ttl:
+          type: integer
+        use_ttl:
+          type: boolean
+        view:
+          type: string
+      type: object
+    ListRecordAAAAResponse:
+      description: The response format to retrieve __AAAARecord__ objects.
+      items:
+        $ref: '#/components/schemas/RecordAAAA'
+      title: ListAAAARecordResponse
+      type: array
+    RecordAAAA:
+      example:
+        creation_time: timestamp
+        aws_rte53_record_info: awsrte53recordinfo
+        creator: STATIC
+        extattrs: extattr
+        shared_record_group: shared_record_group
+        use_ttl: false
+        discovered_data: discoverydata
+        cloud_info: grid:cloudapi:info
+        ddns_protected: false
+        ttl: 0
+        dns_name: dns_name
+        ipv6addr: ipv6addr
+        ms_ad_user_data: msserver:aduser:data
+        view: view
+        zone: zone
+        ddns_principal: ddns_principal
+        disable: false
+        _ref: _ref
+        name: name
+        remove_associated_ptr: false
+        comment: comment
+        last_queried: timestamp
+        forbid_reclamation: false
+        reclaimable: false
+      properties:
+        _ref:
+          description: The reference to the object.
+          type: string
+        aws_rte53_record_info:
+          description: Aws Route 53 record information.
+          enum:
+          - awsrte53recordinfo
+          type: string
+        cloud_info:
+          description: Structure containing all cloud API related information for
+            this object.
+          enum:
+          - grid:cloudapi:info
+          type: string
+        comment:
+          description: Comment for the record; maximum 256 characters.
+          type: string
+        creation_time:
+          description: The time of the record creation in Epoch seconds format.
+          enum:
+          - timestamp
+          type: string
+        creator:
+          description: The record creator. Note that changing creator from or to 'SYSTEM'
+            value is not allowed.
+          enum:
+          - STATIC
+          - DYNAMIC
+          - SYSTEM
+          type: string
+        ddns_principal:
+          description: The GSS-TSIG principal that owns this record.
+          type: string
+        ddns_protected:
+          description: Determines if the DDNS updates for this record are allowed
+            or not.
+          example: false
+          type: boolean
+        disable:
+          description: Determines if the record is disabled or not. False means that
+            the record is enabled.
+          example: false
+          type: boolean
+        discovered_data:
+          description: The discovered data for this AAAA record.
+          enum:
+          - discoverydata
+          type: string
+        dns_name:
+          description: The name for an AAAA record in punycode format.
+          type: string
+        extattrs:
+          description: "Extensible attributes associated with the object. For valid\
+            \ values for extensible attributes, see {extattrs:values}."
+          enum:
+          - extattr
+          type: string
+        forbid_reclamation:
+          description: Determines if the reclamation is allowed for the record or
+            not.
+          example: false
+          type: boolean
+        ipv6addr:
+          description: The IPv6 Address of the record.
+          type: string
+        last_queried:
+          description: The time of the last DNS query in Epoch seconds format.
+          enum:
+          - timestamp
+          type: string
+        ms_ad_user_data:
+          description: The Microsoft Active Directory user related information.
+          enum:
+          - msserver:aduser:data
+          type: string
+        name:
+          description: Name for the AAAA record in FQDN format. This value can be
+            in unicode format.
+          type: string
+        reclaimable:
+          description: Determines if the record is reclaimable or not.
+          example: false
+          type: boolean
+        remove_associated_ptr:
+          description: Delete option that indicates whether the associated PTR records
+            should be removed while deleting the specified A record.
+          example: false
+          type: boolean
+        shared_record_group:
+          description: The name of the shared record group in which the record resides.
+            This field exists only on db_objects if this record is a shared record.
+          type: string
+        ttl:
+          description: "The Time To Live (TTL) value for the record. A 32-bit unsigned\
+            \ integer that represents the duration, in seconds, for which the record\
+            \ is valid (cached). Zero indicates that the record should not be cached."
+          type: integer
+        use_ttl:
+          description: "Use flag for: ttl"
+          example: false
+          type: boolean
+        view:
+          description: "The name of the DNS view in which the record resides. Example:\
+            \ external."
+          type: string
+        zone:
+          description: "The name of the zone in which the record resides. Example:\
+            \ zone.com. If a view is not specified when searching by zone, the default\
+            \ view is used."
+          type: string
+      type: object
+    RecordAAAARequest:
+      example:
+        creator: "['STATIC', 'DYNAMIC', 'SYSTEM']"
+        view: string
+        extattrs: extattr
+        ddns_principal: string
+        disable: bool
+        use_ttl: bool
+        name: string
+        comment: string
+        ddns_protected: bool
+        forbid_reclamation: bool
+        ttl: uint
+        ipv6addr: string
+      properties:
+        comment:
+          example: string
+          type: string
+        creator:
+          example: "['STATIC', 'DYNAMIC', 'SYSTEM']"
+          type: string
+        ddns_principal:
+          example: string
+          type: string
+        ddns_protected:
+          example: bool
+          type: string
+        disable:
+          example: bool
+          type: string
+        extattrs:
+          example: extattr
+          type: string
+        forbid_reclamation:
+          example: bool
+          type: string
+        ipv6addr:
+          example: string
+          type: string
+        name:
+          example: string
+          type: string
+        ttl:
+          example: uint
+          type: string
+        use_ttl:
+          example: bool
+          type: string
+        view:
+          example: string
+          type: string
+      type: object
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
