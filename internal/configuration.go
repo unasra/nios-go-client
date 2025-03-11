@@ -78,7 +78,7 @@ func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		ClientName:       "nios-go-client",
 		CSPURL:           lookupEnv(envBloxOneCSPURL, "https://csp.infoblox.com"),
-		APIKey:           lookupEnv(envBloxOneAPIKey, "admin:infoblox"),
+		APIKey:           lookupEnv(envBloxOneAPIKey, ""),
 		DefaultHeader:    make(map[string]string),
 		Debug:            lookupEnvBool(envIBLogLevel, true),
 		UserAgent:        fmt.Sprintf("nios-%s/%s", sdkIdentifier, version),
