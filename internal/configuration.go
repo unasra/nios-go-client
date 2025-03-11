@@ -76,7 +76,7 @@ type Configuration struct {
 // - Debug: false
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
-		ClientName:       "bloxone-go-client",
+		ClientName:       "nios-go-client",
 		CSPURL:           lookupEnv(envBloxOneCSPURL, "https://csp.infoblox.com"),
 		APIKey:           lookupEnv(envBloxOneAPIKey, "admin:infoblox"),
 		DefaultHeader:    make(map[string]string),
