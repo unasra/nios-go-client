@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## Get
 
-> []RecordA Get(ctx).ReturnFields(returnFields).ReturnFields2(returnFields2).MaxResults(maxResults).ReturnAsObject(returnAsObject).Paging(paging).PageId(pageId).ProxySearch(proxySearch).Schema(schema).SchemaVersion(schemaVersion).GetDoc(getDoc).SchemaSearchable(schemaSearchable).Inheritance(inheritance).Comment(comment).Creator(creator).DdnsPrincipal(ddnsPrincipal).Ipv4addr(ipv4addr).Name(name).Reclaimable(reclaimable).View(view).Zone(zone).Execute()
+> ListRecordAResponse Get(ctx).ReturnFields(returnFields).ReturnFields2(returnFields2).MaxResults(maxResults).ReturnAsObject(returnAsObject).Paging(paging).PageId(pageId).ProxySearch(proxySearch).Schema(schema).SchemaVersion(schemaVersion).GetDoc(getDoc).SchemaSearchable(schemaSearchable).Inheritance(inheritance).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `RecordaAPI.Get``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Get`: []RecordA
+	// response from `Get`: ListRecordAResponse
 	fmt.Fprintf(os.Stdout, "Response from `RecordaAPI.Get`: %v\n", resp)
 }
 ```
@@ -67,18 +67,11 @@ Name | Type | Description  | Notes
 **getDoc** | **int32** | When set to 1, it returns the documentation of the object.Applicable only when _schema_version is 2 | 
 **schemaSearchable** | **int32** | If this option is specified, search only fields will also be returned. Applicable only when _schema_version is 2 | 
 **inheritance** | **bool** | If this option is set to True, fields which support inheritance, will display data properly. | 
-**comment** | **string** | Enter the value of the field | 
-**creator** | **string** | Enter the value of the field | 
-**ddnsPrincipal** | **string** | Enter the value of the field | 
-**ipv4addr** | **string** | Enter the value of the field | 
-**name** | **string** | Enter the value of the field | 
-**reclaimable** | **string** | Enter the value of the field | 
-**view** | **string** | Enter the value of the field | 
-**zone** | **string** | Enter the value of the field | 
+**body** | **map[string]interface{}** | Enter the GET request body here | 
 
 ### Return type
 
-[**[]RecordA**](RecordA.md)
+[**ListRecordAResponse**](ListRecordAResponse.md)
 
 ### Authorization
 
@@ -86,7 +79,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -96,7 +89,7 @@ Name | Type | Description  | Notes
 
 ## Post
 
-> string Post(ctx).RecordARequest(recordARequest).ReturnFields(returnFields).Execute()
+> CreateRecordAResponse Post(ctx).RecordA(recordA).ReturnFields(returnFields).ReturnFields2(returnFields2).ReturnAsObject(returnAsObject).Execute()
 
 
 
@@ -114,15 +107,15 @@ import (
 )
 
 func main() {
-	recordARequest := *dns.NewRecordARequest() // RecordARequest | Enter the request body here
+	recordA := *dns.NewRecordA("Ipv4addr_example", "Name_example") // RecordA | Enter the request body here
 
 	apiClient := dns.NewAPIClient()
-	resp, r, err := apiClient.RecordaAPI.Post(context.Background()).RecordARequest(recordARequest).Execute()
+	resp, r, err := apiClient.RecordaAPI.Post(context.Background()).RecordA(recordA).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RecordaAPI.Post``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Post`: string
+	// response from `Post`: CreateRecordAResponse
 	fmt.Fprintf(os.Stdout, "Response from `RecordaAPI.Post`: %v\n", resp)
 }
 ```
@@ -138,12 +131,14 @@ Other parameters are passed through a pointer to a `RecordaAPIPostRequest` struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**recordARequest** | [**RecordARequest**](RecordARequest.md) | Enter the request body here | 
+**recordA** | [**RecordA**](RecordA.md) | Enter the request body here | 
 **returnFields** | **string** | Enter the field names followed by comma | 
+**returnFields2** | **string** | Enter the field names followed by comma, this returns the required fields along with the default fields | 
+**returnAsObject** | **int32** | Select 1 if result is required as an object | [default to 0]
 
 ### Return type
 
-**string**
+[**CreateRecordAResponse**](CreateRecordAResponse.md)
 
 ### Authorization
 
@@ -161,7 +156,7 @@ Name | Type | Description  | Notes
 
 ## RecordaReferenceDelete
 
-> string RecordaReferenceDelete(ctx, recordaReference).Execute()
+> RecordaReferenceDelete(ctx, recordaReference).ReturnFields(returnFields).ReturnFields2(returnFields2).ReturnAsObject(returnAsObject).Execute()
 
 
 
@@ -184,13 +179,11 @@ func main() {
 	recordaReference := "resourceID:resourceName" // string | Enter the reference for record:a
 
 	apiClient := dns.NewAPIClient()
-	resp, r, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).Execute()
+	r, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RecordaAPI.RecordaReferenceDelete``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RecordaReferenceDelete`: string
-	fmt.Fprintf(os.Stdout, "Response from `RecordaAPI.RecordaReferenceDelete`: %v\n", resp)
 }
 ```
 
@@ -209,10 +202,13 @@ Other parameters are passed through a pointer to a `RecordaAPIRecordaReferenceDe
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+**returnFields** | **string** | Enter the field names followed by comma | 
+**returnFields2** | **string** | Enter the field names followed by comma, this returns the required fields along with the default fields | 
+**returnAsObject** | **int32** | Select 1 if result is required as an object | [default to 0]
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -221,7 +217,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -230,7 +226,7 @@ Name | Type | Description  | Notes
 
 ## RecordaReferenceGet
 
-> RecordA RecordaReferenceGet(ctx, recordaReference).ReturnFields(returnFields).ReturnFields2(returnFields2).ReturnAsObject(returnAsObject).Execute()
+> GetRecordAResponse RecordaReferenceGet(ctx, recordaReference).ReturnFields(returnFields).ReturnFields2(returnFields2).ReturnAsObject(returnAsObject).Execute()
 
 
 
@@ -256,7 +252,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `RecordaAPI.RecordaReferenceGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RecordaReferenceGet`: RecordA
+	// response from `RecordaReferenceGet`: GetRecordAResponse
 	fmt.Fprintf(os.Stdout, "Response from `RecordaAPI.RecordaReferenceGet`: %v\n", resp)
 }
 ```
@@ -282,7 +278,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RecordA**](RecordA.md)
+[**GetRecordAResponse**](GetRecordAResponse.md)
 
 ### Authorization
 
@@ -300,7 +296,7 @@ Name | Type | Description  | Notes
 
 ## RecordaReferencePut
 
-> string RecordaReferencePut(ctx, recordaReference).RecordARequest(recordARequest).ReturnFields(returnFields).Execute()
+> UpdateRecordAResponse RecordaReferencePut(ctx, recordaReference).RecordA(recordA).ReturnFields(returnFields).ReturnFields2(returnFields2).ReturnAsObject(returnAsObject).Execute()
 
 
 
@@ -321,15 +317,15 @@ import (
 
 func main() {
 	recordaReference := "resourceID:resourceName" // string | Enter the reference for record:a
-	recordARequest := *dns.NewRecordARequest() // RecordARequest | Enter the request body here
+	recordA := *dns.NewRecordA("Ipv4addr_example", "Name_example") // RecordA | Enter the request body here
 
 	apiClient := dns.NewAPIClient()
-	resp, r, err := apiClient.RecordaAPI.RecordaReferencePut(context.Background(), recordaReference).RecordARequest(recordARequest).Execute()
+	resp, r, err := apiClient.RecordaAPI.RecordaReferencePut(context.Background(), recordaReference).RecordA(recordA).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RecordaAPI.RecordaReferencePut``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RecordaReferencePut`: string
+	// response from `RecordaReferencePut`: UpdateRecordAResponse
 	fmt.Fprintf(os.Stdout, "Response from `RecordaAPI.RecordaReferencePut`: %v\n", resp)
 }
 ```
@@ -349,12 +345,14 @@ Other parameters are passed through a pointer to a `RecordaAPIRecordaReferencePu
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-**recordARequest** | [**RecordARequest**](RecordARequest.md) | Enter the request body here | 
+**recordA** | [**RecordA**](RecordA.md) | Enter the request body here | 
 **returnFields** | **string** | Enter the field names followed by comma | 
+**returnFields2** | **string** | Enter the field names followed by comma, this returns the required fields along with the default fields | 
+**returnAsObject** | **int32** | Select 1 if result is required as an object | [default to 0]
 
 ### Return type
 
-**string**
+[**UpdateRecordAResponse**](UpdateRecordAResponse.md)
 
 ### Authorization
 

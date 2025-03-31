@@ -119,70 +119,13 @@ paths:
         required: false
         schema:
           type: boolean
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        description: Enter the GET request body here
         required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: creator
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: ddns_principal
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: ipv4addr
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: name
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: reclaimable
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: view
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: Enter the value of the field
-        explode: true
-        in: query
-        name: zone
-        required: false
-        schema:
-          type: string
-        style: form
       responses:
         "200":
           content:
@@ -202,11 +145,28 @@ paths:
         required: false
         schema:
           type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecordARequest'
+              $ref: '#/components/schemas/RecordA'
         description: Enter the request body here
         required: true
       responses:
@@ -214,13 +174,14 @@ paths:
           content:
             application/json:
               schema:
-                description: Reference of the created A record
-                type: string
+                $ref: '#/components/schemas/CreateRecordAResponse'
           description: OK
       security:
       - basicAuth: []
       tags:
       - record:a
+      x-tf-resource: dns_a_record
+      x-tf-datasource: dns_a_records
   /record:a/{record:a_reference}:
     delete:
       description: Delete the record:a resource
@@ -234,14 +195,32 @@ paths:
           example: resourceID:resourceName
           type: string
         style: simple
+      - description: Enter the field names followed by comma
+        in: query
+        name: _return_fields
+        required: false
+        schema:
+          type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
       responses:
         "200":
-          content:
-            application/json:
-              schema:
-                description: Reference of the created A record
-                type: string
-          description: OK
+          description: No content
       security:
       - basicAuth: []
       tags:
@@ -285,7 +264,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecordA'
+                $ref: '#/components/schemas/GetRecordAResponse'
           description: OK
       security:
       - basicAuth: []
@@ -309,11 +288,28 @@ paths:
         required: false
         schema:
           type: string
+      - description: "Enter the field names followed by comma, this returns the required\
+          \ fields along with the default fields"
+        in: query
+        name: _return_fields+
+        required: false
+        schema:
+          type: string
+      - description: Select 1 if result is required as an object
+        in: query
+        name: _return_as_object
+        required: false
+        schema:
+          default: 0
+          enum:
+          - 0
+          - 1
+          type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecordARequest'
+              $ref: '#/components/schemas/RecordA'
         description: Enter the request body here
         required: true
       responses:
@@ -321,8 +317,7 @@ paths:
           content:
             application/json:
               schema:
-                description: Reference of the created A record
-                type: string
+                $ref: '#/components/schemas/UpdateRecordAResponse'
           description: OK
       security:
       - basicAuth: []
@@ -756,24 +751,26 @@ components:
         type: boolean
   schemas:
     ListRecordAResponse:
-      description: The response format to retrieve __ARecord__ objects.
-      items:
-        $ref: '#/components/schemas/RecordA'
-      title: ListARecordResponse
-      type: array
+      oneOf:
+      - description: The response format to retrieve __ARecord__ objects.
+        items:
+          $ref: '#/components/schemas/RecordA'
+        title: ListRecordAResponseArray
+        type: array
+      - $ref: '#/components/schemas/ListRecordAResponseObject'
     RecordA:
       example:
-        creation_time: timestamp
+        creation_time: 0
         aws_rte53_record_info: awsrte53recordinfo
         creator: STATIC
-        extattrs: extattr
+        extattrs: "{}"
         shared_record_group: shared_record_group
         use_ttl: true
         discovered_data: discoverydata
         cloud_info: grid:cloudapi:info
         ddns_protected: true
         ipv4addr: ipv4addr
-        ttl: 0
+        ttl: 6
         dns_name: dns_name
         ms_ad_user_data: msserver:aduser:data
         view: view
@@ -790,17 +787,20 @@ components:
       properties:
         _ref:
           description: The reference to the object.
+          readOnly: true
           type: string
         aws_rte53_record_info:
           description: Aws Route 53 record information.
           enum:
           - awsrte53recordinfo
+          readOnly: true
           type: string
         cloud_info:
           description: Structure containing all cloud API related information for
             this object.
           enum:
           - grid:cloudapi:info
+          readOnly: true
           type: string
         comment:
           description: Comment for the record; maximum 256 characters.
@@ -808,8 +808,10 @@ components:
         creation_time:
           description: The time of the record creation in Epoch seconds format.
           enum:
-          - timestamp
-          type: string
+          - null
+          format: timestamp
+          readOnly: true
+          type: integer
         creator:
           description: The record creator.
           enum:
@@ -832,15 +834,17 @@ components:
           description: The discovered data for this A record.
           enum:
           - discoverydata
+          readOnly: true
           type: string
         dns_name:
           description: The name for an A record in punycode format.
+          readOnly: true
           type: string
         extattrs:
           description: Extensible attributes associated with the object.
           enum:
           - extattr
-          type: string
+          type: object
         forbid_reclamation:
           description: Determines if the reclamation is allowed for the record or
             not.
@@ -852,17 +856,20 @@ components:
           description: The time of the last DNS query in Epoch seconds format.
           enum:
           - timestamp
+          readOnly: true
           type: string
         ms_ad_user_data:
           description: The Microsoft Active Directory user related information.
           enum:
           - msserver:aduser:data
+          readOnly: true
           type: string
         name:
-          description: Name for A record in FQDN format.
+          description: The Name of the record.
           type: string
         reclaimable:
           description: Determines if the record is reclaimable or not.
+          readOnly: true
           type: boolean
         remove_associated_ptr:
           description: Whether to remove associated PTR records while deleting the
@@ -870,6 +877,7 @@ components:
           type: boolean
         shared_record_group:
           description: The shared record group this record belongs to.
+          readOnly: true
           type: string
         ttl:
           description: "Time-to-live value of the record, in seconds."
@@ -883,51 +891,110 @@ components:
           type: string
         zone:
           description: The zone in which the record resides.
+          readOnly: true
           type: string
+      required:
+      - ipv4addr
+      - name
       type: object
-    RecordARequest:
+    CreateRecordAResponse:
+      description: The response format to delete __ARecord__ objects.
       example:
-        creator: STATIC
-        view: view
-        extattrs: extattrs
-        ddns_principal: ddns_principal
-        disable: true
-        use_ttl: true
-        name: name
-        comment: comment
-        ddns_protected: true
-        forbid_reclamation: true
-        ipv4addr: ipv4addr
-        ttl: 0
+        result:
+          creation_time: 0
+          aws_rte53_record_info: awsrte53recordinfo
+          creator: STATIC
+          extattrs: "{}"
+          shared_record_group: shared_record_group
+          use_ttl: true
+          discovered_data: discoverydata
+          cloud_info: grid:cloudapi:info
+          ddns_protected: true
+          ipv4addr: ipv4addr
+          ttl: 6
+          dns_name: dns_name
+          ms_ad_user_data: msserver:aduser:data
+          view: view
+          zone: zone
+          ddns_principal: ddns_principal
+          disable: true
+          _ref: _ref
+          name: name
+          remove_associated_ptr: true
+          comment: comment
+          last_queried: timestamp
+          forbid_reclamation: true
+          reclaimable: true
       properties:
-        comment:
-          type: string
-        creator:
-          enum:
-          - STATIC
-          - DYNAMIC
-          - SYSTEM
-          type: string
-        ddns_principal:
-          type: string
-        ddns_protected:
-          type: boolean
-        disable:
-          type: boolean
-        extattrs:
-          type: string
-        forbid_reclamation:
-          type: boolean
-        ipv4addr:
-          type: string
-        name:
-          type: string
-        ttl:
-          type: integer
-        use_ttl:
-          type: boolean
-        view:
-          type: string
+        result:
+          $ref: '#/components/schemas/RecordA'
+      title: CreateARecordResponse
+      type: object
+    GetRecordAResponse:
+      description: The response format to delete __ARecord__ objects.
+      example:
+        result:
+          creation_time: 0
+          aws_rte53_record_info: awsrte53recordinfo
+          creator: STATIC
+          extattrs: "{}"
+          shared_record_group: shared_record_group
+          use_ttl: true
+          discovered_data: discoverydata
+          cloud_info: grid:cloudapi:info
+          ddns_protected: true
+          ipv4addr: ipv4addr
+          ttl: 6
+          dns_name: dns_name
+          ms_ad_user_data: msserver:aduser:data
+          view: view
+          zone: zone
+          ddns_principal: ddns_principal
+          disable: true
+          _ref: _ref
+          name: name
+          remove_associated_ptr: true
+          comment: comment
+          last_queried: timestamp
+          forbid_reclamation: true
+          reclaimable: true
+      properties:
+        result:
+          $ref: '#/components/schemas/RecordA'
+      title: GetARecordResponse
+      type: object
+    UpdateRecordAResponse:
+      description: The response format to delete __ARecord__ objects.
+      example:
+        result:
+          creation_time: 0
+          aws_rte53_record_info: awsrte53recordinfo
+          creator: STATIC
+          extattrs: "{}"
+          shared_record_group: shared_record_group
+          use_ttl: true
+          discovered_data: discoverydata
+          cloud_info: grid:cloudapi:info
+          ddns_protected: true
+          ipv4addr: ipv4addr
+          ttl: 6
+          dns_name: dns_name
+          ms_ad_user_data: msserver:aduser:data
+          view: view
+          zone: zone
+          ddns_principal: ddns_principal
+          disable: true
+          _ref: _ref
+          name: name
+          remove_associated_ptr: true
+          comment: comment
+          last_queried: timestamp
+          forbid_reclamation: true
+          reclaimable: true
+      properties:
+        result:
+          $ref: '#/components/schemas/RecordA'
+      title: UpdateARecordResponse
       type: object
     ListRecordAAAAResponse:
       description: The response format to retrieve __AAAARecord__ objects.
@@ -1124,6 +1191,15 @@ components:
         view:
           example: string
           type: string
+      type: object
+    ListRecordAResponseObject:
+      description: The response format to retrieve __ARecord__ objects.
+      properties:
+        result:
+          items:
+            $ref: '#/components/schemas/RecordA'
+          type: array
+      title: ListRecordAResponseObject
       type: object
   securitySchemes:
     basicAuth:

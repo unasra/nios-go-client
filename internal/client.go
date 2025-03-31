@@ -30,9 +30,9 @@ const (
 	headerSDK           = "x-infoblox-sdk"
 	headerAuthorization = "Authorization"
 
-	envBloxOneCSPURL = "NIOS_HOST_URL"
-	envBloxOneAPIKey = "NIOS_AUTH"
-	envIBLogLevel    = "IB_LOG_LEVEL"
+	envNiosHostURL = "NIOS_HOST_URL"
+	envNiosAuth    = "NIOS_AUTH"
+	envIBLogLevel  = "IB_LOG_LEVEL"
 
 	version       = "0.1"
 	sdkIdentifier = "golang-sdk"
@@ -74,12 +74,12 @@ func NewAPIClient(basePath string, cfg *Configuration) *APIClient {
 		cfg.DefaultTags = make(map[string]string)
 	}
 
-	apiUrl := cfg.CSPURL + basePath
+	apiUrl := cfg.NIOSHostURL + basePath
 	cfg.Servers = []ServerConfiguration{{URL: apiUrl}}
 	cfg.DefaultHeader[headerSDK] = sdkIdentifier
 	cfg.DefaultHeader[headerClient] = cfg.ClientName
-	cfg.APIKey = base64.StdEncoding.EncodeToString([]byte(cfg.APIKey))
-	cfg.DefaultHeader[headerAuthorization] = "Basic " + cfg.APIKey
+	cfg.NIOSAuth = base64.StdEncoding.EncodeToString([]byte(cfg.NIOSAuth))
+	cfg.DefaultHeader[headerAuthorization] = "Basic " + cfg.NIOSAuth
 
 	c := &APIClient{}
 	c.Cfg = cfg

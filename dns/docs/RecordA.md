@@ -4,36 +4,36 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ref** | Pointer to **string** | The reference to the object. | [optional] 
-**AwsRte53RecordInfo** | Pointer to **string** | Aws Route 53 record information. | [optional] 
-**CloudInfo** | Pointer to **string** | Structure containing all cloud API related information for this object. | [optional] 
+**Ref** | Pointer to **string** | The reference to the object. | [optional] [readonly] 
+**AwsRte53RecordInfo** | Pointer to **string** | Aws Route 53 record information. | [optional] [readonly] 
+**CloudInfo** | Pointer to **string** | Structure containing all cloud API related information for this object. | [optional] [readonly] 
 **Comment** | Pointer to **string** | Comment for the record; maximum 256 characters. | [optional] 
-**CreationTime** | Pointer to **string** | The time of the record creation in Epoch seconds format. | [optional] 
+**CreationTime** | Pointer to **int32** | The time of the record creation in Epoch seconds format. | [optional] [readonly] 
 **Creator** | Pointer to **string** | The record creator. | [optional] 
 **DdnsPrincipal** | Pointer to **string** | The GSS-TSIG principal that owns this record. | [optional] 
 **DdnsProtected** | Pointer to **bool** | Determines if the DDNS updates for this record are allowed or not. | [optional] 
 **Disable** | Pointer to **bool** | Determines if the record is disabled or not. False means that the record is enabled. | [optional] 
-**DiscoveredData** | Pointer to **string** | The discovered data for this A record. | [optional] 
-**DnsName** | Pointer to **string** | The name for an A record in punycode format. | [optional] 
-**Extattrs** | Pointer to **string** | Extensible attributes associated with the object. | [optional] 
+**DiscoveredData** | Pointer to **string** | The discovered data for this A record. | [optional] [readonly] 
+**DnsName** | Pointer to **string** | The name for an A record in punycode format. | [optional] [readonly] 
+**Extattrs** | Pointer to **map[string]interface{}** | Extensible attributes associated with the object. | [optional] 
 **ForbidReclamation** | Pointer to **bool** | Determines if the reclamation is allowed for the record or not. | [optional] 
-**Ipv4addr** | Pointer to **string** | The IPv4 Address of the record. | [optional] 
-**LastQueried** | Pointer to **string** | The time of the last DNS query in Epoch seconds format. | [optional] 
-**MsAdUserData** | Pointer to **string** | The Microsoft Active Directory user related information. | [optional] 
-**Name** | Pointer to **string** | Name for A record in FQDN format. | [optional] 
-**Reclaimable** | Pointer to **bool** | Determines if the record is reclaimable or not. | [optional] 
+**Ipv4addr** | **string** | The IPv4 Address of the record. | 
+**LastQueried** | Pointer to **string** | The time of the last DNS query in Epoch seconds format. | [optional] [readonly] 
+**MsAdUserData** | Pointer to **string** | The Microsoft Active Directory user related information. | [optional] [readonly] 
+**Name** | **string** | The Name of the record. | 
+**Reclaimable** | Pointer to **bool** | Determines if the record is reclaimable or not. | [optional] [readonly] 
 **RemoveAssociatedPtr** | Pointer to **bool** | Whether to remove associated PTR records while deleting the A record. | [optional] 
-**SharedRecordGroup** | Pointer to **string** | The shared record group this record belongs to. | [optional] 
+**SharedRecordGroup** | Pointer to **string** | The shared record group this record belongs to. | [optional] [readonly] 
 **Ttl** | Pointer to **int32** | Time-to-live value of the record, in seconds. | [optional] 
 **UseTtl** | Pointer to **bool** | Flag to indicate whether the TTL value should be used for the A record. | [optional] 
 **View** | Pointer to **string** | View that this record is part of. | [optional] 
-**Zone** | Pointer to **string** | The zone in which the record resides. | [optional] 
+**Zone** | Pointer to **string** | The zone in which the record resides. | [optional] [readonly] 
 
 ## Methods
 
 ### NewRecordA
 
-`func NewRecordA() *RecordA`
+`func NewRecordA(ipv4addr string, name string, ) *RecordA`
 
 NewRecordA instantiates a new RecordA object
 This constructor will assign default values to properties that have it defined,
@@ -150,20 +150,20 @@ HasComment returns a boolean if a field has been set.
 
 ### GetCreationTime
 
-`func (o *RecordA) GetCreationTime() string`
+`func (o *RecordA) GetCreationTime() int32`
 
 GetCreationTime returns the CreationTime field if non-nil, zero value otherwise.
 
 ### GetCreationTimeOk
 
-`func (o *RecordA) GetCreationTimeOk() (*string, bool)`
+`func (o *RecordA) GetCreationTimeOk() (*int32, bool)`
 
 GetCreationTimeOk returns a tuple with the CreationTime field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreationTime
 
-`func (o *RecordA) SetCreationTime(v string)`
+`func (o *RecordA) SetCreationTime(v int32)`
 
 SetCreationTime sets CreationTime field to given value.
 
@@ -325,20 +325,20 @@ HasDnsName returns a boolean if a field has been set.
 
 ### GetExtattrs
 
-`func (o *RecordA) GetExtattrs() string`
+`func (o *RecordA) GetExtattrs() map[string]interface{}`
 
 GetExtattrs returns the Extattrs field if non-nil, zero value otherwise.
 
 ### GetExtattrsOk
 
-`func (o *RecordA) GetExtattrsOk() (*string, bool)`
+`func (o *RecordA) GetExtattrsOk() (*map[string]interface{}, bool)`
 
 GetExtattrsOk returns a tuple with the Extattrs field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetExtattrs
 
-`func (o *RecordA) SetExtattrs(v string)`
+`func (o *RecordA) SetExtattrs(v map[string]interface{})`
 
 SetExtattrs sets Extattrs field to given value.
 
@@ -392,11 +392,6 @@ and a boolean to check if the value has been set.
 
 SetIpv4addr sets Ipv4addr field to given value.
 
-### HasIpv4addr
-
-`func (o *RecordA) HasIpv4addr() bool`
-
-HasIpv4addr returns a boolean if a field has been set.
 
 ### GetLastQueried
 
@@ -467,11 +462,6 @@ and a boolean to check if the value has been set.
 
 SetName sets Name field to given value.
 
-### HasName
-
-`func (o *RecordA) HasName() bool`
-
-HasName returns a boolean if a field has been set.
 
 ### GetReclaimable
 

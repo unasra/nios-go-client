@@ -53,10 +53,9 @@ func TestRecordaAPIService(t *testing.T) {
 
 		var recordaReference string
 
-		resp, httpRes, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).Execute()
+		httpRes, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).Execute()
 
 		require.Nil(t, err)
-		require.NotNil(t, resp)
 		assert.Equal(t, 200, httpRes.StatusCode)
 
 	})

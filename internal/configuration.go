@@ -57,8 +57,8 @@ type ServerConfigurations []ServerConfiguration
 // Configuration stores the configuration of the API client
 type Configuration struct {
 	ClientName       string            `json:"clientName,omitempty"`
-	CSPURL           string            `json:"cspURL,omitempty"`
-	APIKey           string            `json:"apiKey,omitempty"`
+	NIOSHostURL      string            `json:"niosHostURL,omitempty"`
+	NIOSAuth         string            `json:"niosAuth,omitempty"`
 	DefaultHeader    map[string]string `json:"defaultHeader,omitempty"`
 	UserAgent        string            `json:"userAgent,omitempty"`
 	Debug            bool              `json:"debug,omitempty"`
@@ -70,15 +70,14 @@ type Configuration struct {
 
 // NewConfiguration returns a new Configuration object.
 // The following default values are set:
-// - ClientName: "bloxone-go-client"
-// - CSPURL: "https://csp.infoblox.com"
-// - UserAgent: "bloxone-go-client/version"
+// - ClientName: "nios-go-client"
+// - UserAgent: "nios-go-client/version"
 // - Debug: false
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		ClientName:       "nios-go-client",
-		CSPURL:           lookupEnv(envBloxOneCSPURL, "https://csp.infoblox.com"),
-		APIKey:           lookupEnv(envBloxOneAPIKey, ""),
+		NIOSHostURL:      lookupEnv(envNiosHostURL, ""),
+		NIOSAuth:         lookupEnv(envNiosAuth, ""),
 		DefaultHeader:    make(map[string]string),
 		Debug:            lookupEnvBool(envIBLogLevel, true),
 		UserAgent:        fmt.Sprintf("nios-%s/%s", sdkIdentifier, version),

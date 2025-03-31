@@ -20,13 +20,32 @@ import (
 	"github.com/unasra/nios-go-client/dns"
 )
 
+var readableAttributes = "aws_rte53_record_info,cloud_info,comment,creation_time,creator,ddns_principal,ddns_protected,disable,discovered_data,dns_name,extattrs,forbid_reclamation,ipv4addr,last_queried,ms_ad_user_data,name,reclaimable,shared_record_group,ttl,use_ttl,view,zone"
+
 func TestCreateARecord(t *testing.T) {
 	apiClient := dns.NewAPIClient()
-	RecordA := dns.RecordARequest{
-		Name:     dns.PtrString("test.example.com"),
-		Ipv4addr: dns.PtrString("192.0.2.1"),
+	RecordA := dns.RecordA{
+		//Ipv4addr: dns.RecordAIpv4addr{
+		//	RecordAIpv4addrOneOf: &dns.RecordAIpv4addrOneOf{
+		//		ObjectFunction: dns.PtrString("next_available_ip"),
+		//		Parameters:     map[string]interface{}{},
+		//		ResultField:    dns.PtrString("ips"),
+		//		Object:         dns.PtrString("network"),
+		//		ObjectParameters: map[string]interface{}{
+		//			"network":      "85.85.0.0/16",
+		//			"network_view": "default",
+		//		},
+		//	},
+		//	//String: dns.PtrString("192.168.1.1"),
+		//},
+		Name: "test360.example.com",
+		Extattrs: map[string]interface{}{
+			"Site": map[string]interface{}{
+				"value": "Site1",
+			},
+		},
 	}
-	resp, httpRes, err := apiClient.RecordaAPI.Post(context.Background()).RecordARequest(RecordA).Execute()
+	resp, httpRes, err := apiClient.RecordaAPI.Post(context.Background()).RecordA(RecordA).ReturnAsObject(1).ReturnFields2(readableAttributes).Execute()
 
 	if err != nil {
 		t.Errorf("Error: %v", err)
@@ -38,24 +57,24 @@ func TestCreateARecord(t *testing.T) {
 
 func TestGetARecords(t *testing.T) {
 	apiClient := dns.NewAPIClient()
-	resp, httpRes, err := apiClient.RecordaAPI.Get(context.Background()).Execute()
+	resp, httpRes, err := apiClient.RecordaAPI.Get(context.Background()).ReturnFields2("comment").ReturnAsObject(1).
+		Body(
+			map[string]interface{}{
+				"*Site": "Site1",
+			},
+		).Execute()
 
 	if err != nil {
 		t.Errorf("Error: %v", err)
 	}
 
-	// for i, record := range resp {
-	// 	fmt.Println(i, *record.Name, *record.Ipv4addr)
-	// }
-
-	// fmt.Println(*resp[0].Name)
 	assert.NotEmpty(t, resp)
 	assert.Equal(t, 200, httpRes.StatusCode)
 }
 
 func TestGetARecordsasObject(t *testing.T) {
 	apiClient := dns.NewAPIClient()
-	resp, httpRes, err := apiClient.RecordaAPI.Get(context.Background()).ReturnAsObject(1).Execute()
+	resp, httpRes, err := apiClient.RecordaAPI.Get(context.Background()).Execute()
 
 	if err != nil {
 		t.Errorf("Error: %v", err)
@@ -73,9 +92,10 @@ func TestGetARecordsasObject(t *testing.T) {
 func TestGetARecordByReference(t *testing.T) {
 
 	apiClient := dns.NewAPIClient()
-	recordaReference := "ZG5zLmJpbmRfYSQuMi5jb20uZXhhbXBsZSxhLTIsMTAuMC4wLjA"
+	recordaReference := "ZG5zLmJpbmRfYSQuX2RlZmF1bHQuY29tLmV4YW1wbGUsdGVzdDgsMTkyLjAuMi4x:test8.example.com/default"
 
-	resp, httpRes, err := apiClient.RecordaAPI.RecordaReferenceGet(context.Background(), recordaReference).Execute()
+	resp, httpRes, err := apiClient.RecordaAPI.RecordaReferenceGet(context.Background(), recordaReference).ReturnAsObject(1).Execute()
+	//RecordaReferenceGet(context.Background(), recordaReference).Execute()
 
 	assert.NotEmpty(t, resp)
 	assert.Equal(t, 200, httpRes.StatusCode)
@@ -84,12 +104,13 @@ func TestGetARecordByReference(t *testing.T) {
 
 func TestUpdateARecord(t *testing.T) {
 	apiClient := dns.NewAPIClient()
-	RecordA := dns.RecordARequest{
-		Name: dns.PtrString("test1.example.com"),
+	RecordA := dns.RecordA{
+		//Name:    "test8.example.com",
+		Comment: dns.PtrString("This is newly updated comment"),
 	}
-	recordaReference := "ZG5zLmJpbmRfYSQuX2RlZmF1bHQuY29tLmV4YW1wbGUsdGVzdCwxOTIuMC4yLjE"
+	recordaReference := "ZG5zLmJpbmRfYSQuX2RlZmF1bHQuY29tLmV4YW1wbGUsdGVzdDgsMTkyLjAuMi4x:test8.example.com/default"
 
-	resp, httpRes, err := apiClient.RecordaAPI.RecordaReferencePut(context.Background(), recordaReference).RecordARequest(RecordA).Execute()
+	resp, httpRes, err := apiClient.RecordaAPI.RecordaReferencePut(context.Background(), recordaReference).RecordA(RecordA).ReturnFields2("comment").ReturnAsObject(1).Execute()
 
 	assert.NotEmpty(t, resp)
 	assert.Equal(t, 200, httpRes.StatusCode)
@@ -99,12 +120,12 @@ func TestUpdateARecord(t *testing.T) {
 
 func TestDeleteARecord(t *testing.T) {
 	apiClient := dns.NewAPIClient()
-	recordaReference := "ZG5zLmJpbmRfYSQuX2RlZmF1bHQuY29tLmV4YW1wbGUsdGVzdDEsMTkyLjAuMi4x"
+	recordaReference := "ZG5zLmJpbmRfYSQuX2RlZmF1bHQuY29tLmV4YW1wbGUsdGVzdDgsMTkyLjAuMi4x:test8.example.com/default"
 
-	resp, httpRes, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).Execute()
+	resp, err := apiClient.RecordaAPI.RecordaReferenceDelete(context.Background(), recordaReference).ReturnAsObject(1).Execute()
 
 	assert.NotEmpty(t, resp)
-	assert.Equal(t, 200, httpRes.StatusCode)
+	//assert.Equal(t, 200, httpRes.StatusCode)
 	assert.Nil(t, err)
 	fmt.Println(resp)
 }

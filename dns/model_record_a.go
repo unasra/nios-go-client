@@ -13,6 +13,7 @@ package dns
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the RecordA type satisfies the MappedNullable interface at compile time
@@ -29,7 +30,7 @@ type RecordA struct {
 	// Comment for the record; maximum 256 characters.
 	Comment *string `json:"comment,omitempty"`
 	// The time of the record creation in Epoch seconds format.
-	CreationTime *string `json:"creation_time,omitempty"`
+	CreationTime *int32 `json:"creation_time,omitempty"`
 	// The record creator.
 	Creator *string `json:"creator,omitempty"`
 	// The GSS-TSIG principal that owns this record.
@@ -43,17 +44,17 @@ type RecordA struct {
 	// The name for an A record in punycode format.
 	DnsName *string `json:"dns_name,omitempty"`
 	// Extensible attributes associated with the object.
-	Extattrs *string `json:"extattrs,omitempty"`
+	Extattrs map[string]interface{} `json:"extattrs,omitempty"`
 	// Determines if the reclamation is allowed for the record or not.
 	ForbidReclamation *bool `json:"forbid_reclamation,omitempty"`
 	// The IPv4 Address of the record.
-	Ipv4addr *string `json:"ipv4addr,omitempty"`
+	Ipv4addr string `json:"ipv4addr"`
 	// The time of the last DNS query in Epoch seconds format.
 	LastQueried *string `json:"last_queried,omitempty"`
 	// The Microsoft Active Directory user related information.
 	MsAdUserData *string `json:"ms_ad_user_data,omitempty"`
-	// Name for A record in FQDN format.
-	Name *string `json:"name,omitempty"`
+	// The Name of the record.
+	Name string `json:"name"`
 	// Determines if the record is reclaimable or not.
 	Reclaimable *bool `json:"reclaimable,omitempty"`
 	// Whether to remove associated PTR records while deleting the A record.
@@ -77,8 +78,10 @@ type _RecordA RecordA
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRecordA() *RecordA {
+func NewRecordA(ipv4addr string, name string) *RecordA {
 	this := RecordA{}
+	this.Ipv4addr = ipv4addr
+	this.Name = name
 	return &this
 }
 
@@ -219,9 +222,9 @@ func (o *RecordA) SetComment(v string) {
 }
 
 // GetCreationTime returns the CreationTime field value if set, zero value otherwise.
-func (o *RecordA) GetCreationTime() string {
+func (o *RecordA) GetCreationTime() int32 {
 	if o == nil || IsNil(o.CreationTime) {
-		var ret string
+		var ret int32
 		return ret
 	}
 	return *o.CreationTime
@@ -229,7 +232,7 @@ func (o *RecordA) GetCreationTime() string {
 
 // GetCreationTimeOk returns a tuple with the CreationTime field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RecordA) GetCreationTimeOk() (*string, bool) {
+func (o *RecordA) GetCreationTimeOk() (*int32, bool) {
 	if o == nil || IsNil(o.CreationTime) {
 		return nil, false
 	}
@@ -245,8 +248,8 @@ func (o *RecordA) HasCreationTime() bool {
 	return false
 }
 
-// SetCreationTime gets a reference to the given string and assigns it to the CreationTime field.
-func (o *RecordA) SetCreationTime(v string) {
+// SetCreationTime gets a reference to the given int32 and assigns it to the CreationTime field.
+func (o *RecordA) SetCreationTime(v int32) {
 	o.CreationTime = &v
 }
 
@@ -443,19 +446,19 @@ func (o *RecordA) SetDnsName(v string) {
 }
 
 // GetExtattrs returns the Extattrs field value if set, zero value otherwise.
-func (o *RecordA) GetExtattrs() string {
+func (o *RecordA) GetExtattrs() map[string]interface{} {
 	if o == nil || IsNil(o.Extattrs) {
-		var ret string
+		var ret map[string]interface{}
 		return ret
 	}
-	return *o.Extattrs
+	return o.Extattrs
 }
 
 // GetExtattrsOk returns a tuple with the Extattrs field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RecordA) GetExtattrsOk() (*string, bool) {
+func (o *RecordA) GetExtattrsOk() (map[string]interface{}, bool) {
 	if o == nil || IsNil(o.Extattrs) {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
 	return o.Extattrs, true
 }
@@ -469,9 +472,9 @@ func (o *RecordA) HasExtattrs() bool {
 	return false
 }
 
-// SetExtattrs gets a reference to the given string and assigns it to the Extattrs field.
-func (o *RecordA) SetExtattrs(v string) {
-	o.Extattrs = &v
+// SetExtattrs gets a reference to the given map[string]interface{} and assigns it to the Extattrs field.
+func (o *RecordA) SetExtattrs(v map[string]interface{}) {
+	o.Extattrs = v
 }
 
 // GetForbidReclamation returns the ForbidReclamation field value if set, zero value otherwise.
@@ -506,36 +509,28 @@ func (o *RecordA) SetForbidReclamation(v bool) {
 	o.ForbidReclamation = &v
 }
 
-// GetIpv4addr returns the Ipv4addr field value if set, zero value otherwise.
+// GetIpv4addr returns the Ipv4addr field value
 func (o *RecordA) GetIpv4addr() string {
-	if o == nil || IsNil(o.Ipv4addr) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Ipv4addr
+
+	return o.Ipv4addr
 }
 
-// GetIpv4addrOk returns a tuple with the Ipv4addr field value if set, nil otherwise
+// GetIpv4addrOk returns a tuple with the Ipv4addr field value
 // and a boolean to check if the value has been set.
 func (o *RecordA) GetIpv4addrOk() (*string, bool) {
-	if o == nil || IsNil(o.Ipv4addr) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Ipv4addr, true
+	return &o.Ipv4addr, true
 }
 
-// HasIpv4addr returns a boolean if a field has been set.
-func (o *RecordA) HasIpv4addr() bool {
-	if o != nil && !IsNil(o.Ipv4addr) {
-		return true
-	}
-
-	return false
-}
-
-// SetIpv4addr gets a reference to the given string and assigns it to the Ipv4addr field.
+// SetIpv4addr sets field value
 func (o *RecordA) SetIpv4addr(v string) {
-	o.Ipv4addr = &v
+	o.Ipv4addr = v
 }
 
 // GetLastQueried returns the LastQueried field value if set, zero value otherwise.
@@ -602,36 +597,28 @@ func (o *RecordA) SetMsAdUserData(v string) {
 	o.MsAdUserData = &v
 }
 
-// GetName returns the Name field value if set, zero value otherwise.
+// GetName returns the Name field value
 func (o *RecordA) GetName() string {
-	if o == nil || IsNil(o.Name) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Name
+
+	return o.Name
 }
 
-// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
 func (o *RecordA) GetNameOk() (*string, bool) {
-	if o == nil || IsNil(o.Name) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Name, true
+	return &o.Name, true
 }
 
-// HasName returns a boolean if a field has been set.
-func (o *RecordA) HasName() bool {
-	if o != nil && !IsNil(o.Name) {
-		return true
-	}
-
-	return false
-}
-
-// SetName gets a reference to the given string and assigns it to the Name field.
+// SetName sets field value
 func (o *RecordA) SetName(v string) {
-	o.Name = &v
+	o.Name = v
 }
 
 // GetReclaimable returns the Reclaimable field value if set, zero value otherwise.
@@ -907,18 +894,14 @@ func (o RecordA) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ForbidReclamation) {
 		toSerialize["forbid_reclamation"] = o.ForbidReclamation
 	}
-	if !IsNil(o.Ipv4addr) {
-		toSerialize["ipv4addr"] = o.Ipv4addr
-	}
+	toSerialize["ipv4addr"] = o.Ipv4addr
 	if !IsNil(o.LastQueried) {
 		toSerialize["last_queried"] = o.LastQueried
 	}
 	if !IsNil(o.MsAdUserData) {
 		toSerialize["ms_ad_user_data"] = o.MsAdUserData
 	}
-	if !IsNil(o.Name) {
-		toSerialize["name"] = o.Name
-	}
+	toSerialize["name"] = o.Name
 	if !IsNil(o.Reclaimable) {
 		toSerialize["reclaimable"] = o.Reclaimable
 	}
@@ -949,6 +932,28 @@ func (o RecordA) ToMap() (map[string]interface{}, error) {
 }
 
 func (o *RecordA) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"ipv4addr",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
 	varRecordA := _RecordA{}
 
 	err = json.Unmarshal(data, &varRecordA)

@@ -8,20 +8,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWithCSPUrl(t *testing.T) {
+func TestWithNIOSAuthUrl(t *testing.T) {
 	config := &internal.Configuration{}
 	url := "http://test.com"
-	opt := WithCSPUrl(url)
+	opt := WithNIOSHostUrl(url)
 	opt(config)
-	assert.Equal(t, url, config.CSPURL)
+	assert.Equal(t, url, config.NIOSHostURL)
 }
 
-func TestWithAPIKey(t *testing.T) {
+func TestWithNIOSAuth(t *testing.T) {
 	config := &internal.Configuration{}
 	apiKey := "testKey"
-	opt := WithAPIKey(apiKey)
+	opt := WithNIOSAuth(apiKey)
 	opt(config)
-	assert.Equal(t, apiKey, config.APIKey)
+	assert.Equal(t, apiKey, config.NIOSAuth)
 }
 
 func TestWithHTTPClient(t *testing.T) {
